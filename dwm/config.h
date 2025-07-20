@@ -83,7 +83,7 @@ static const char *decreasebrightness[] = { "brightnessctl", "s", "5%-", NULL };
 static const char *updatedwmblocks[]    = { "pkill", "-RTMIN+1", "dwmblocks", NULL };
 
 /* --- emulator --- */
-static const char *termcmd[]  = { "st", NULL };
+static const char *termcmd[]  = { "kitty", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
