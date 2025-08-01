@@ -169,11 +169,16 @@ static void (*bartabmonfns[])(Monitor *) = { NULL /* , customlayoutfn */ };
 #if BAR_PANGO_PATCH
 static const char font[]                 = "monospace 10";
 #else
-static const char *fonts[]               = { "monospace:size=10" };
+static const char *fonts[]               = { 
+					   "monospace:size=14",
+					   "Font Awesome 6 Free Solid:size=14"	
+};
 #endif // BAR_PANGO_PATCH
 static const char dmenufont[]            = "monospace:size=10";
 
 static char c000000[]                    = "#000000"; // placeholder value
+
+static const char col_green[] 		 = "#225e22";
 
 static char normfgcolor[]                = "#bbbbbb";
 static char normbgcolor[]                = "#222222";
@@ -181,9 +186,9 @@ static char normbordercolor[]            = "#444444";
 static char normfloatcolor[]             = "#db8fd9";
 
 static char selfgcolor[]                 = "#eeeeee";
-static char selbgcolor[]                 = "#005577";
-static char selbordercolor[]             = "#005577";
-static char selfloatcolor[]              = "#005577";
+static char selbgcolor[]                 = "#225e22";
+static char selbordercolor[]             = "#225e22";
+static char selfloatcolor[]              = "#225e22";
 
 static char titlenormfgcolor[]           = "#bbbbbb";
 static char titlenormbgcolor[]           = "#222222";
@@ -191,9 +196,9 @@ static char titlenormbordercolor[]       = "#444444";
 static char titlenormfloatcolor[]        = "#db8fd9";
 
 static char titleselfgcolor[]            = "#eeeeee";
-static char titleselbgcolor[]            = "#005577";
-static char titleselbordercolor[]        = "#005577";
-static char titleselfloatcolor[]         = "#005577";
+static char titleselbgcolor[]            = "#225e22";
+static char titleselbordercolor[]        = "#225e22";
+static char titleselfloatcolor[]         = "#225e22";
 
 static char tagsnormfgcolor[]            = "#bbbbbb";
 static char tagsnormbgcolor[]            = "#222222";
@@ -201,11 +206,11 @@ static char tagsnormbordercolor[]        = "#444444";
 static char tagsnormfloatcolor[]         = "#db8fd9";
 
 static char tagsselfgcolor[]             = "#eeeeee";
-static char tagsselbgcolor[]             = "#005577";
-static char tagsselbordercolor[]         = "#005577";
-static char tagsselfloatcolor[]          = "#005577";
+static char tagsselbgcolor[]             = "#225e22";
+static char tagsselbordercolor[]         = "#225e22";
+static char tagsselfloatcolor[]          = "#225e22";
 
-static char hidnormfgcolor[]             = "#005577";
+static char hidnormfgcolor[]             = "#225e22";
 static char hidselfgcolor[]              = "#227799";
 static char hidnormbgcolor[]             = "#222222";
 static char hidselbgcolor[]              = "#222222";
@@ -429,7 +434,7 @@ static const Launcher launchers[] = {
 
 #if COOL_AUTOSTART_PATCH
 static const char *const autostart[] = {
-	"kitty", NULL,
+	"st", NULL,
 	NULL /* terminate */
 };
 #endif // COOL_AUTOSTART_PATCH
@@ -474,12 +479,12 @@ static Sp scratchpads[] = {
 #if NAMETAG_PATCH
 static char tagicons[][NUMTAGS][MAX_TAGLEN] =
 #else
-static char *tagicons[][NUMTAGS] =
+static char *tagicons[][6] =
 #endif // NAMETAG_PATCH
 {
-	[DEFAULT_TAGS]        = { "1", "2", "3", "4", "5", "6", "7", "8", "9" },
-	[ALTERNATIVE_TAGS]    = { "A", "B", "C", "D", "E", "F", "G", "H", "I" },
-	[ALT_TAGS_DECORATION] = { "<1>", "<2>", "<3>", "<4>", "<5>", "<6>", "<7>", "<8>", "<9>" },
+	[DEFAULT_TAGS]        = { "1", "2", "3", "4", "5", "6" },
+	[ALTERNATIVE_TAGS]    = { "A", "B", "C", "D", "E", "F" },
+	[ALT_TAGS_DECORATION] = { "<1>", "<2>", "<3>", "<4>", "<5>", "<6>" },
 };
 
 #if BAR_TAGGRID_PATCH
@@ -800,7 +805,7 @@ static const char *xkb_layouts[]  = {
 #endif // XKB_PATCH
 
 /* key definitions */
-#define MODKEY Mod1Mask
+#define MODKEY Mod4Mask
 #if COMBO_PATCH && SWAPTAGS_PATCH && TAGOTHERMONITOR_PATCH
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      comboview,      {.ui = 1 << TAG} }, \
@@ -897,6 +902,21 @@ static const char *dmenucmd[] = {
 	#endif // BAR_DMENUMATCHTOP_PATCH
 	NULL
 };
+
+/* static const char *command_name[] = { "command", "argument", NULL }; */
+
+static const char *firefox[] 		= { "firefox", NULL };
+static const char *telegram[] 		= { "Telegram", NULL };
+static const char *pycharm[] 		= { "pycharm", NULL };
+static const char *steam[]		= { "steam", NULL };
+
+static const char *increasevolume[]     = { "pactl", "set-sink-volume", "0", "+5%", NULL };
+static const char *decreasevolume[]     = { "pactl", "set-sink-volume", "0", "-5%", NULL };
+static const char *mute[]               = { "pactl", "set-sink-mute", "0", "toggle", NULL };
+static const char *increasebrightness[] = { "brightnessctl", "s", "+5%", NULL };
+static const char *decreasebrightness[] = { "brightnessctl", "s", "5%-", NULL };
+static const char *updatedwmblocks[] 	= { "pkill", "-RTMIN+1", "dwmblocks", NULL };
+
 static const char *termcmd[]  = { "kitty", NULL };
 
 #if BAR_STATUSCMD_PATCH
@@ -1026,12 +1046,29 @@ ResourcePref resources[] = {
 #endif // XRESOURCES_PATCH
 
 static const Key keys[] = {
-	/* modifier                     key            function                argument */
+	/* modifier                     key            		   function    	argument */
 	#if KEYMODES_PATCH
-	{ MODKEY,                       XK_Escape,     setkeymode,             {.ui = COMMANDMODE} },
+	{ MODKEY,                       XK_Escape,     		   setkeymode,  {.ui = COMMANDMODE} },
 	#endif // KEYMODES_PATCH
-	{ MODKEY,                       XK_p,          spawn,                  {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,             XK_Return,     spawn,                  {.v = termcmd } },
+
+
+	{ MODKEY,                       XK_p,          		   spawn,       {.v = dmenucmd } },
+	{ MODKEY|ShiftMask,             XK_Return,     		   spawn,       {.v = termcmd } },
+
+	{ MODKEY|ShiftMask, 		XK_f,	       		   spawn,	{.v = firefox } },
+	{ MODKEY|ShiftMask, 		XK_t,	       		   spawn,	{.v = telegram } },
+	{ MODKEY|ShiftMask, 		XK_p,	       		   spawn,	{.v = pycharm } },
+	{ MODKEY|ShiftMask, 		XK_s,  	       		   spawn,	{.v = steam } },
+
+	{ 0,                            XF86XK_AudioMute,          spawn,  	{.v = mute} },
+        { 0,                            XF86XK_AudioRaiseVolume,   spawn,  	{.v = increasevolume} },
+        { 0,                            XF86XK_AudioLowerVolume,   spawn,  	{.v = decreasevolume} },
+        { 0,                            XF86XK_MonBrightnessUp,    spawn,  	{.v = increasebrightness} },
+        { 0,                            XF86XK_MonBrightnessDown,  spawn,  	{.v = decreasebrightness} },
+	
+	{ 0, 				XK_ISO_Next_Group, 	   spawn, 	{.v = updatedwmblocks} },
+
+
 	#if RIODRAW_PATCH
 	{ MODKEY|ControlMask,           XK_p,          riospawnsync,           {.v = dmenucmd } },
 	{ MODKEY|ControlMask,           XK_Return,     riospawn,               {.v = termcmd } },
